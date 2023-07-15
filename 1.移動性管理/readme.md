@@ -1,4 +1,6 @@
-1.馬達照片![image](n20馬達.jpeg)![image](EV3馬達.jpg)
+1.馬達照片
+![image](n20馬達.jpeg)
+![image](EV3馬達.jpg)
 2.底盤選擇
   2-1遙控車
   2-2 3D列印
