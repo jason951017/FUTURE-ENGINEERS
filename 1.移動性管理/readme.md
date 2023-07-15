@@ -2,10 +2,9 @@
 ![image](n20馬達.jpeg)
 ![image](EV3馬達.jpg)
 2.底盤選擇
-  2-1遙控車![image](搖1.jpg)![image](搖2.jpg)
-  2-2 3D列印![image](自1.jpg)![image](自2.jpg)
-  2-3迴轉半徑差異
-3. 3D列印齒輪
+  2-1遙控車迴轉半徑![image](搖1.jpg)![image](搖2.jpg)
+  2-2 3D列印車迴轉半徑![image](自1.jpg)![image](自2.jpg)
+3. 3D列印齒輪![image](齒輪.jpg)
 4.馬達轉速
 5.差速器齒輪比
 6.裝配說明(底盤加框說明)
