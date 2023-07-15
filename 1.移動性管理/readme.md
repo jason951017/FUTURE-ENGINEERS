@@ -2,8 +2,8 @@
 ![image](n20馬達.jpeg)
 ![image](EV3馬達.jpg)
 2.底盤選擇
-  2-1遙控車
-  2-2 3D列印
+  2-1遙控車![image](搖1.jpg)![image](搖2.jpg)
+  2-2 3D列印![image](自1.jpg)![image](自2.jpg)
   2-3迴轉半徑差異
 3. 3D列印齒輪
 4.馬達轉速
