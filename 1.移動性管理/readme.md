@@ -1,5 +1,5 @@
 1.馬達照片
-![image](n20馬達.jpeg=200)
+![image](n20馬達.jpeg=200*100)
 ![image](EV3馬達.jpg)
 2.底盤選擇
   2-1遙控車迴轉半徑![image](搖1.jpg)![image](搖2.jpg)
