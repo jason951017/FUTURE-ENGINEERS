@@ -3,4 +3,4 @@
 3.攝影機esp32cam
 4.超音波hc-sr04
 5.按鈕
-6.RGB燈
+6.RGB燈![image](燈.jpg)
