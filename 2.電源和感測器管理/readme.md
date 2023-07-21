@@ -1,11 +1,23 @@
-1.陀螺儀mpu6050![image](mpu6050.jpg)
+1.陀螺儀mpu6050
 
-2.顏色感應器tcs34725![image](TCS34725.jpg)
+![image](mpu6050.jpg)
 
-3.攝影機esp32cam![image](esp32cam.jpg)
+2.顏色感應器tcs34725
 
-4.超音波hc-sr04![image](hc-sr04.jpg)
+![image](TCS34725.jpg)
 
-5.按鈕![image](按鈕.jpg)
+3.攝影機esp32cam
 
-6.RGB燈![image](燈.jpg)
+![image](esp32cam.jpg)
+
+4.超音波hc-sr04
+
+![image](hc-sr04.jpg)
+
+5.按鈕
+
+![image](按鈕.jpg)
+
+6.RGB燈
+
+![image](燈.jpg)
