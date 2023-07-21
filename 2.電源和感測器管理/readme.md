@@ -1,3 +1,5 @@
+找datasheet
+
 1.主控版
 
 ![image](Krduino.jpg)
