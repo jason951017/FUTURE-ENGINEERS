@@ -1,3 +1,7 @@
+1.主控版
+
+![image](Krduino.jpg)
+
 1.陀螺儀mpu6050
 
 ![image](mpu6050.jpg)
@@ -21,3 +25,5 @@
 6.RGB燈
 
 ![image](燈.jpg)
+
+14500
