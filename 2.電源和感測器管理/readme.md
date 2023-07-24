@@ -28,4 +28,6 @@
 
 ![image](燈.jpg)
 
-14500金屬鋰電池
+14500coolook金屬鋰電池
+
+[image](coolook電池.jpg)
