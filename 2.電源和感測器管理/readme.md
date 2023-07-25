@@ -24,7 +24,7 @@
 
 ![image](按鈕.jpg)
 
-6.RGB燈
+6.指示燈
 
 ![image](燈.jpg)
 
