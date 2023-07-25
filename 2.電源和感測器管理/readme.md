@@ -4,6 +4,10 @@
 
 ![image](Krduino.jpg)
 
+   穩壓晶片tb6612
+
+   
+
 1.陀螺儀mpu6050
 
 ![image](mpu6050.jpg)
