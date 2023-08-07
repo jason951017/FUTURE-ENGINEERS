@@ -1,0 +1,216 @@
+#include "init.h"
+
+int ya = 0, yb = 1, cmin, cmax;
+
+void setup() {
+  /*
+     初始化感應器
+     Initialize the sensors.
+  */
+  FeInit();
+  getDis();
+  delayMicroseconds(250);
+  static int ldis, fix5 = 0, lastColor = 0, turnback = 0;
+  while (true) {
+    /*
+       沿陀螺儀相對零度角前進並進行避障
+       Move forward along the gyroscope's relative zero-degree angle and perform obstacle avoidance.
+    */
+    rygSet(0, 0, 0);
+    if ((CameraGet(3) > 15) || (CameraGet(7) > 15)) {
+      caturn_turn();
+      if (CameraGet(3) > 15)fix5 = -20;
+      if (CameraGet(7) > 15)fix5 = 20;
+    } else {
+      setTurn(getRelGyro(0) * 1.2);
+    }
+    motorSpd(250);
+    /*
+       利用光源感應器分辨地面上藍橘線得知行進方向為順時針或逆時針
+       Utilize the light sensor to distinguish between blue and orange lines on the
+       ground, determining whether the travel direction is clockwise or counterclockwise.
+    */
+    int color  = getTcs();
+    if (color > 0 && color < 40) {
+      ya = 1;
+      cmin = 0;
+      cmax = 40;
+      break;
+    }
+    if (color > 200 && color < 240) {
+      ya = -1;
+      cmin = 200;
+      cmax = 240;
+      break;
+    }
+  }
+}
+//20,220
+void loop() {
+  rygSet(0, 0, 0);
+  static byte b = 0, c = 0;
+  static int ldis, fix5 = 0, lastColor = 0;
+  static uint32_t a = 0, timer = 0, back = 0, straightTime = 0;
+  motorSpd(250);
+  /*
+     記數進行8次
+     Count up to 8 times.
+  */
+  for (int r = 0; r < 8; r++) {
+    /*
+       前進直到偵測到地圖上藍橘線
+       Move forward until the blue or orange lines on the map are detected.
+    */
+    while (getTcs() < cmin || getTcs() > cmax) {
+      /*
+        沿陀螺儀相對零度角前進並進行避障
+        Move forward along the gyroscope's relative zero-degree angle and perform obstacle avoidance.
+      */
+      if ((CameraGet(3) > 15) || (CameraGet(7) > 15)) {
+        caturn_turn();
+      } else {
+        setTurn(getRelGyro(a + fix5) * 1.2);
+      }
+      if (r == 4) {
+        if (CameraGet(3) > 15) {
+          lastColor = -1;
+        } else if (CameraGet(7) > 15) {
+          lastColor = 1;
+        }
+      }
+    }
+    //************************************************************************************************
+    /*
+       將相對角目標調整90度
+       Adjust the relative angle target by 90 degrees.
+    */
+    a += ya * 90;
+    //*****************************************************************************
+    /*
+       轉向直到與目標角度相差小於10度
+       Turn until the difference between the currentangle and the target angle is less than 10 degrees
+    */
+    while (getRelGyro(a) > 10 || getRelGyro(a) < -10) {
+      motorSpd(250);
+      /*
+         在觀測到障礙後進行避障
+         After detecting an obstacle, engage in obstacle avoidance.
+      */
+      if ((CameraGet(3) > 15) || (CameraGet(7) > 15)) {
+        caturn_turn();
+      }
+      setTurn(getRelGyro(a) * 1.2);
+    }
+  }
+  //*********************************************************************************************
+  straightTime = millis() + 700;
+  if (lastColor == -1) {
+    rygSet(0, 0, 0);
+    /*
+       前進0.7秒並在途中進行避障
+       Move forward for 0.7 seconds and perform obstacle avoidance during the motion.
+    */
+    while (millis() < straightTime) {
+      motorSpd(250);
+      caturn_turn();
+    }
+    //*************************************************************************************************
+    /*
+       改變地面上藍橘線目標色相值
+       Modify the target hue value of the blue and orange lines on the ground.
+    */
+    if (ya == 1) {
+      cmin = 200;
+      cmax = 240;
+    } else {
+      cmin = 0;
+      cmax = 40;
+    }
+    /*
+       沿相對角180度後退
+       Move backward along the relative angle by 180 degrees.
+    */
+    straightTime = millis() + 1800;
+    while (millis() < straightTime) {
+      motorSpd(-250);
+      setTurn(getRelGyro(a) * (-1));
+    }
+    /*
+       轉向直到與目標角相差小於10度
+       Turn until the difference between the current angle and the target angle is less than 10 degrees.
+    */
+    a += ya * 90;
+    while (getRelGyro(a) > 10 || getRelGyro(a) < -10) {
+      motorSpd(250);
+      setTurn(getRelGyro(a) * 1.2);
+    }
+  }
+  //****************************************************************************
+  /*
+       前進1秒並在途中進行避障
+       Move forward for 1 seconds and perform obstacle avoidance during the motion.
+  */
+  straightTime = millis() + 1000;
+  while (millis() < straightTime) {
+    setTurn(getRelGyro(a) * 1.2);
+    caturn_turn();
+  }
+
+  //****************************************************************************
+  /*
+     記數3+(是否往反方向)次
+     Count 3+(if turn in the opposite direction)times.
+  */
+  for (int r = 0; r < (3 + (lastColor > 0)); r++) {
+    /*
+       前進直到偵測到地圖上藍橘線
+       Move forward until the blue or orange lines on the map are detected.
+    */
+    while (getTcs() < cmin || getTcs() > cmax) {
+      /*
+        沿陀螺儀相對零度角前進並進行避障
+        Move forward along the gyroscope's relative zero-degree angle and perform obstacle avoidance.
+      */
+      if ((CameraGet(3) > 15) || (CameraGet(7) > 15)) {
+        caturn_turn();
+      } else {
+        setTurn(getRelGyro(a + fix5) * 1.2);
+      }
+    }
+    //******************************************************************************************
+    /*
+       將目標角調整90度
+       Adjust the target angle by 90 degrees.
+    */
+    a += ya * 90 * lastColor;
+    //******************************************************************************************
+    /*
+       轉向直到與目標角度相差小於10度
+       Turn until the difference between the currentangle and the target angle is less than 10 degrees
+    */
+    while (getRelGyro(a) > 10 || getRelGyro(a) < -10) {
+      motorSpd(250);
+      /*
+         在觀測到障礙後進行避障
+         After detecting an obstacle, engage in obstacle avoidance.
+      */
+      if ((CameraGet(3) > 15) || (CameraGet(7) > 15)) {
+        caturn_turn();
+      }
+      setTurn(getRelGyro(a) * 1.2);
+    }
+  }
+  //*******************************************************************************************
+  /*
+   * 前進0.8秒後停止
+   * Move forward for 0.8 seconds, then stop.
+   */
+  straightTime = millis() + 800;
+  while (millis() < straightTime) {
+    motorSpd(250);
+    caturn_turn();
+  }
+  while (1) {
+    motorSpd(0);
+  }
+}
